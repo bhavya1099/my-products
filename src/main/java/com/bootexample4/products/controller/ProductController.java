@@ -13,44 +13,43 @@ import com.bootexample4.products.repository.ProductRepository;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    @Autowired
-    private ProductRepository productRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
+	@GetMapping
+	public List<Product> getAllProducts() {
+		return productRepository.findAll();
+	}
 
-    @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productRepository.save(product);
-    }
+	@PostMapping
+	public Product createProduct(@RequestBody Product product) {
+		return productRepository.save(product);
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        return productRepository.findById(id)
-                .map(product -> ResponseEntity.ok().body(product))
-                .orElse(ResponseEntity.notFound().build());
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+		return productRepository.findById(id)
+			.map(product -> ResponseEntity.ok().body(product))
+			.orElse(ResponseEntity.notFound().build());
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productRepository.findById(id)
-                .map(existingProduct -> {
-                    existingProduct.setName(product.getName());
-                    existingProduct.setDescription(product.getDescription());
-                    existingProduct.setPrice(product.getPrice());
-                    Product updatedProduct = productRepository.save(existingProduct);
-                    return ResponseEntity.ok().body(updatedProduct);
-                }).orElse(ResponseEntity.notFound().build());
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+		return productRepository.findById(id).map(existingProduct -> {
+			existingProduct.setName(product.getName());
+			existingProduct.setDescription(product.getDescription());
+			existingProduct.setPrice(product.getPrice());
+			Product updatedProduct = productRepository.save(existingProduct);
+			return ResponseEntity.ok().body(updatedProduct);
+		}).orElse(ResponseEntity.notFound().build());
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteProduct(@PathVariable Long id) {
-        return productRepository.findById(id)
-                .map(product -> {
-                    productRepository.delete(product);
-                    return ResponseEntity.ok().build();
-                }).orElse(ResponseEntity.notFound().build());
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> deleteProduct(@PathVariable Long id) {
+		return productRepository.findById(id).map(product -> {
+			productRepository.delete(product);
+			return ResponseEntity.ok().build();
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
 }
