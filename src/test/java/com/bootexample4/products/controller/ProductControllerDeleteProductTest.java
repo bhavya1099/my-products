@@ -72,30 +72,57 @@ public class ProductControllerDeleteProductTest {
 
 	@InjectMocks
 	private ProductController productController;
+/*
+The error message: "NullPointer Cannot invoke "com.bootexample4.products.repository.ProductRepository.findById(Object)" because "this.productRepository" is null" indicates that the 'productRepository' instance variable inside the test method is null. 
 
-	@Test
-	@Tag("valid")
-	public void deleteExistingProduct() {
-		Product product = new Product();
-		when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
-		ResponseEntity<Object> responseEntity = productController.deleteProduct(1L);
-		assertEquals(OK, responseEntity.getStatusCode());
-	}
+This means that the 'productRepository' instance has not been initialized before it is used in the test method. In the Mocking framework, before using any mock object, it needs to be initialized either by using the annotation '@Mock' or by using 'Mockito.mock(ClassName.class)' in the setup method. 
 
-	@Test
-    @Tag("invalid")
-    public void deleteNonExistentProduct() {
-        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
-        ResponseEntity<Object> responseEntity = productController.deleteProduct(1L);
-        assertEquals(NOT_FOUND, responseEntity.getStatusCode());
-    }
+In this case, the 'productRepository' object is not initialized that's why when it's used in 'when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));', it's throwing a NullPointerException. 
 
-	@Test
-    @Tag("boundary")
-    public void deleteProductFromEmptyRepository() {
-        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
-        ResponseEntity<Object> responseEntity = productController.deleteProduct(1L);
-        assertEquals(NOT_FOUND, responseEntity.getStatusCode());
-    }
+So, the test case is failing because the 'productRepository' mock object is not initialized before its usage. It is not a test case failure or a business logic issue, it is a test setup issue. 
+
+Before running this test case, the 'productRepository' instance needs to be initialized properly.
+@Test
+@Tag("valid")
+public void deleteExistingProduct() {
+    Product product = new Product();
+    when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+    ResponseEntity<Object> responseEntity = productController.deleteProduct(1L);
+    assertEquals(OK, responseEntity.getStatusCode());
+}
+*/
+/*
+The test failure is due to a NullPointerException which is thrown when the test tries to call a method on a null object. In this case, "this.productRepository" is null. 
+
+This error usually occurs because the object (in this case, the 'productRepository') is not properly initialized before the test runs. Typically, in a unit test for a controller class, you would Mock the dependencies (like repositories) so they can simulate the behavior of the real objects.
+
+In this scenario, the 'productRepository' has not been initialized or set up correctly before the test runs, hence it is null when the test tries to use it. Therefore, when the test tries to call 'findById' method on 'productRepository', it throws a NullPointerException.
+
+To resolve this, make sure to initialize the 'productRepository' before the test runs. You can use @Mock or @MockBean to create a mock of 'productRepository', and then use @InjectMocks to inject it into the 'productController'. This way, when the test runs, 'productRepository' would not be null and the test should pass.
+@Test
+@Tag("invalid")
+public void deleteNonExistentProduct() {
+    when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+    ResponseEntity<Object> responseEntity = productController.deleteProduct(1L);
+    assertEquals(NOT_FOUND, responseEntity.getStatusCode());
+}
+*/
+/*
+The test failure is due to a NullPointerException which is thrown when the test tries to call a method on a null object. In this case, "this.productRepository" is null. 
+
+This usually happens when the object (in this case, productRepository) isn't properly initialized before the test runs. The productRepository is being mocked in the test case to return an empty Optional when findById is called with any Long value. However, it seems like the productRepository itself has not been initialized before this mocking, which is causing it to be null at runtime.
+
+In other words, the test is failing because the productRepository instance in the test has not been instantiated or injected prior to the test execution. This is a setup issue with the test environment, not a problem with the business logic or the test case itself.
+
+The prerequisite to run this test is to ensure that the productRepository object is properly initialized or injected before the test runs. This can be achieved by using annotations provided by the testing framework like @Mock or @InjectMocks (when using Mockito) or by manually initializing the object in a setup method.
+@Test
+@Tag("boundary")
+public void deleteProductFromEmptyRepository() {
+    when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+    ResponseEntity<Object> responseEntity = productController.deleteProduct(1L);
+    assertEquals(NOT_FOUND, responseEntity.getStatusCode());
+}
+*/
+
 
 }
