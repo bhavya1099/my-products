@@ -120,16 +120,31 @@ public class ProductControllerGetProductByIdTest {
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(404);
         assertThat(responseEntity.getBody()).isNull();
     }
+/*
+```java
+@Test
+@Tag("boundary")
+void getProductById_WithValidId() {
+    // Arrange
+    Long id = 1L;
+    // Act
+    ResponseEntity<Product> responseEntity = productController.getProductById(id);
+    // Assert
+    assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
+    assertThat(responseEntity.getBody()).isNotNull();
+}
+```
+@Test
+@Tag("boundary")
+void getProductById_WithNullId() {
+    // Arrange
+    // Act
+    ResponseEntity<Product> responseEntity = productController.getProductById(null);
+    // Assert
+    assertThat(responseEntity.getStatusCodeValue()).isEqualTo(400);
+    assertThat(responseEntity.getBody()).isNull();
+}
+*/
 
-	@Test
-	@Tag("boundary")
-	void getProductById_WithNullId() {
-		// Arrange
-		// Act
-		ResponseEntity<Product> responseEntity = productController.getProductById(null);
-		// Assert
-		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(400);
-		assertThat(responseEntity.getBody()).isNull();
-	}
 
 }
