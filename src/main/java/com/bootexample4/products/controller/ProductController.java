@@ -28,7 +28,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        System.out.println("Inside get product by id");
+       System.out.println("print ln--");
         return productRepository.findById(id)
                 .map(product -> ResponseEntity.ok().body(product))
                 .orElse(ResponseEntity.notFound().build());
