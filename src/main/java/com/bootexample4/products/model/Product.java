@@ -28,6 +28,7 @@ public class Product {
     }
 
     public String getName() {
+        System.out.println("inside get name function");
         return name;
     }
 
