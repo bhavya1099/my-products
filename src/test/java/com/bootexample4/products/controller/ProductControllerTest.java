@@ -1,144 +1,33 @@
 package com.bootexample4.products.controller;
 
-import org.junit.jupiter.api.Assertions.assertEquals;
-import org.mockito.Mockito.when;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.junit.jupiter.MockitoExtension;
 import com.bootexample4.products.model.Product;
 import com.bootexample4.products.repository.ProductRepository;
-import org.junit.jupiter.api;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
 import org.mockito.Mockito;
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.context.SpringBootTest;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.mockito.ArgumentMatchers.anyLong;
+import org.mockito.Mockito.when;
+import org.junit.jupiter.api;
+import java.util.List;
+import org.springframework.web.bind.annotation;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.mockito.Mockito.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import org.mockito.exceptions.base.MockitoException;
 
 public class ProductControllerTest {
-
-	/*
-	 * ROOST_METHOD_HASH=getAllProducts_c7c755eb4e
-	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
-	 *
-	 */@BeforeEach
-	public void setUp() {
-		productList = Arrays.asList(new Product(), new Product());
-	}
-
-	/*
-	 * ROOST_METHOD_HASH=getAllProducts_c7c755eb4e
-	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
-	 *
-	 */@Test
-@Tag("valid")
-public void testGetAllProducts() throws Exception {
-    when(productRepository.findAll()).thenReturn(productList);
-    List<Product> result = productController.getAllProducts();
-    assertEquals(productList, result, "getAllProducts should return productList");
-}
-
-	/*
-	 * ROOST_METHOD_HASH=getAllProducts_c7c755eb4e
-	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
-	 *
-	 */@Test
-@Tag("boundary")
-public void testGetAllProductsWithEmptyRepo() throws Exception {
-    when(productRepository.findAll()).thenReturn(Arrays.asList());
-    List<Product> result = productController.getAllProducts();
-    assertEquals(0, result.size(), "getAllProducts should return empty list when repo is empty");
-}
-
-	/*
-	 * ROOST_METHOD_HASH=getAllProducts_c7c755eb4e
-	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
-	 *
-	 */@Test
-@Tag("invalid")
-public void testGetAllProductsException() throws Exception {
-    when(productRepository.findAll()).thenThrow(MockitoException.class);
-    try {
-        productController.getAllProducts();
-    } catch (Exception e) {
-        assertEquals(MockitoException.class, e.getClass(), "getAllProducts should throw exception when repo throws exception");
-    }
-}
-
-	/*
-	 * ROOST_METHOD_HASH=createProduct_60409495d0
-	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
-	 *
-	 */@BeforeEach
-	public void setUp() {
-		testProduct = new Product();
-		testProduct.setName("Test Product");
-		testProduct.setDescription("Test Description");
-		testProduct.setPrice(123.45);
-	}
-
-	/*
-	 * ROOST_METHOD_HASH=createProduct_60409495d0
-	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
-	 *
-	 */@Test
-@Tag("valid")
-public void testCreateProductWithValidProduct() {
-    when(productRepository.save(any(Product.class))).thenReturn(testProduct);
-    Product createdProduct = productController.createProduct(testProduct);
-    assertNotNull(createdProduct);
-    assertEquals(testProduct.getName(), createdProduct.getName());
-}
-
-	/*
-	 * ROOST_METHOD_HASH=createProduct_60409495d0
-	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
-	 *
-	 */@Test
-	@Tag("invalid")
-	public void testCreateProductWithNullProduct() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			productController.createProduct(null);
-		});
-	}
-
-	/*
-	 * ROOST_METHOD_HASH=createProduct_60409495d0
-	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
-	 *
-	 */@Test
-@Tag("boundary")
-public void testCreateProductWithExistingProduct() {
-    when(productRepository.save(any(Product.class))).thenReturn(testProduct);
-    Product createdProduct = productController.createProduct(testProduct);
-    assertNotNull(createdProduct);
-    assertEquals(testProduct.getName(), createdProduct.getName());
-}
-
-	/*
-	 * ROOST_METHOD_HASH=createProduct_60409495d0
-	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
-	 *
-	 */@Test
-	@Tag("invalid")
-	public void testCreateProductWithIncompleteProductData() {
-		Product incompleteProduct = new Product();
-		assertThrows(IllegalArgumentException.class, () -> {
-			productController.createProduct(incompleteProduct);
-		});
-	}
 
 	/*
 	 * ROOST_METHOD_HASH=getProductById_33a5e4d3c9
@@ -242,6 +131,7 @@ public void shouldReturnNotFoundWhenIdIsInvalid() {
 		productWithInvalidData.setDescription("");
 
 		productWithInvalidData.setPrice(-20.00);
+
 		Product existingProduct = new Product();
 		existingProduct.setId(1L);
 		existingProduct.setName("Existing Name");
@@ -298,6 +188,145 @@ public void shouldReturnNotFoundWhenIdIsInvalid() {
 		Long nullId = null;
 
 		assertThrows(NullPointerException.class, () -> productController.deleteProduct(nullId));
+	}
+
+	/*
+	 * ROOST_METHOD_HASH=getAllProducts_4aa51aef31
+	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
+	 *
+	 */@BeforeEach
+	public void setUp() {
+		productList = Arrays.asList(new Product(), new Product());
+	}
+
+	/*
+	 * ROOST_METHOD_HASH=getAllProducts_4aa51aef31
+	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
+	 *
+	 */@Test
+@Tag("valid")
+public void testGetAllProducts() throws Exception {
+    when(productRepository.findAll()).thenReturn(productList);
+    List<Product> result = productController.getAllProducts();
+    assertEquals(productList, result, "getAllProducts should return productList");
+}
+
+	/*
+	 * ROOST_METHOD_HASH=getAllProducts_4aa51aef31
+	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
+	 *
+	 */@Test
+@Tag("boundary")
+public void testGetAllProductsWithEmptyRepo() throws Exception {
+    when(productRepository.findAll()).thenReturn(Arrays.asList());
+    List<Product> result = productController.getAllProducts();
+    assertEquals(0, result.size(), "getAllProducts should return empty list when repo is empty");
+}
+
+	/*
+	 * ROOST_METHOD_HASH=getAllProducts_4aa51aef31
+	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
+	 *
+	 */@Test
+@Tag("invalid")
+public void testGetAllProductsException() throws Exception {
+    when(productRepository.findAll()).thenThrow(MockitoException.class);
+    try {
+        productController.getAllProducts();
+    } catch (Exception e) {
+        assertEquals(MockitoException.class, e.getClass(), "getAllProducts should throw exception when repo throws exception");
+    }
+}
+
+	/*
+	 * ROOST_METHOD_HASH=getAllProducts_4aa51aef31
+	 * ROOST_METHOD_SIG_HASH=getAllProducts_e267ceea76
+	 *
+	 */@Test
+@Tag("boundary")
+public void testGetAllProductsWhenNullRepo() throws Exception {
+    when(productRepository.findAll()).thenReturn(null);
+    List<Product> result = productController.getAllProducts();
+    assertEquals(null, result, "getAllProducts should return null when repo is null");
+}
+
+	/*
+	 * ROOST_METHOD_HASH=createProduct_6ba7446418
+	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
+	 *
+	 */@BeforeEach
+	public void setUp() {
+		testProduct = new Product();
+		testProduct.setName("Test Product");
+		testProduct.setDescription("Test Description");
+		testProduct.setPrice(123.45);
+	}
+
+	/*
+	 * ROOST_METHOD_HASH=createProduct_6ba7446418
+	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
+	 *
+	 */@Test
+@Tag("valid")
+public void testCreateProductWithValidProduct() {
+    when(productRepository.save(any(Product.class))).thenReturn(testProduct);
+    Product createdProduct = productController.createProduct(testProduct);
+    assertNotNull(createdProduct);
+    assertEquals(testProduct.getName(), createdProduct.getName());
+}
+
+	/*
+	 * ROOST_METHOD_HASH=createProduct_6ba7446418
+	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
+	 *
+	 */@Test
+	@Tag("invalid")
+	public void testCreateProductWithNullProduct() {
+		assertThrows(IllegalArgumentException.class, () -> {
+			productController.createProduct(null);
+		});
+	}
+
+	/*
+	 * ROOST_METHOD_HASH=createProduct_6ba7446418
+	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
+	 *
+	 */@Test
+@Tag("boundary")
+public void testCreateProductWithExistingProduct() {
+    when(productRepository.save(any(Product.class))).thenReturn(testProduct);
+    Product createdProduct = productController.createProduct(testProduct);
+    assertNotNull(createdProduct);
+    assertEquals(testProduct.getName(), createdProduct.getName());
+}
+
+	/*
+	 * ROOST_METHOD_HASH=createProduct_6ba7446418
+	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
+	 *
+	 */@Test
+	@Tag("invalid")
+	public void testCreateProductWithIncompleteProductData() {
+		Product incompleteProduct = new Product();
+		assertThrows(IllegalArgumentException.class, () -> {
+			productController.createProduct(incompleteProduct);
+		});
+	}
+
+	/*
+	 * ROOST_METHOD_HASH=createProduct_6ba7446418
+	 * ROOST_METHOD_SIG_HASH=createProduct_5b0158b3eb
+	 *
+	 */@Test
+	@Tag("invalid")
+	public void testCreateProductWithEmptyProductData() {
+		Product emptyProduct = new Product();
+		emptyProduct.setName("");
+		emptyProduct.setDescription("");
+		emptyProduct.setPrice(0.0);
+		assertThrows(IllegalArgumentException.class, () -> {
+			productController.createProduct(emptyProduct);
+		});
 	}
 
 }
