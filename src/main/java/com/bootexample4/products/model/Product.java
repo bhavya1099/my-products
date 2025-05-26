@@ -19,6 +19,7 @@ public class Product {
     private double price;
 
     public Long getId() {
+        System.out.println("inside getId function");
         return id;
     }
 
@@ -27,6 +28,7 @@ public class Product {
     }
 
     public String getName() {
+        System.out.println("inside get name function");
         return name;
     }
 
