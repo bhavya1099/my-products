@@ -37,6 +37,7 @@ public class Product {
     }
 
     public String getDescription() {
+        System.out.println("inside get get description function");
         return description;
     }
 
