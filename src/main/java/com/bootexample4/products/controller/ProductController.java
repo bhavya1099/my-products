@@ -18,7 +18,7 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {
-        System.out.println("new change")
+        System.out.println("new change");
         return productRepository.findAll();
     }
 
