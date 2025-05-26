@@ -19,6 +19,7 @@ public class Product {
     private double price;
 
     public Long getId() {
+        System.out.println("check in the function');
         return id;
     }
 
