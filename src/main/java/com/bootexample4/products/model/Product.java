@@ -19,6 +19,7 @@ public class Product {
     private double price;
 
     public Long getId() {
+           System.out.println("inside get all products");
         return id;
     }
 

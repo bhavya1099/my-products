@@ -18,11 +18,13 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {
+        System.out.println("inside get all products");
         return productRepository.findAll();
     }
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
+           System.out.println("inside get all products");
         return productRepository.save(product);
     }
 
