@@ -33,6 +33,13 @@
       <version>0.0.40</version>
       <!--Dependency added by RoostGPT-->
     </dependency>
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>2.2.3</version>
+      <scope>compile</scope>
+      <!--Dependency added by RoostGPT-->
+    </dependency>
     <!-- mockserver -->
     <dependency>
       <groupId>org.mock-server</groupId>

@@ -137,6 +137,7 @@ public void testGetAllProductsException() throws Exception {
 		assertThrows(IllegalArgumentException.class, () -> {
 			productController.createProduct(incompleteProduct);
 		});
+
 	}
 
 	/*
@@ -223,6 +224,7 @@ public void shouldReturnNotFoundWhenIdIsInvalid() {
 	public void testProductUpdateWithInvalidDetails() {
 
 		Product productWithInvalidData = new Product(1L, "", "", -20.00);
+
 		Product existingProduct = new Product(1L, "Existing Name", "Existing Description", 50.00);
 		when(productRepository.findById(1L)).thenReturn(java.util.Optional.of(existingProduct));
 		ResponseEntity<Product> responseEntity = productController.updateProduct(1L, productWithInvalidData);
