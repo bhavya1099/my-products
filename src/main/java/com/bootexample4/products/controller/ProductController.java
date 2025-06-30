@@ -48,6 +48,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable Long id) {
+        System.out.println("delete product");
         return productRepository.findById(id)
                 .map(product -> {
                     productRepository.delete(product);
