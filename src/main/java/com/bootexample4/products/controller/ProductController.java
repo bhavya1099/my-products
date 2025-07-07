@@ -36,6 +36,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        System.out.println("inside update product function");
         return productRepository.findById(id)
                 .map(existingProduct -> {
                     existingProduct.setName(product.getName());
@@ -48,6 +49,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable Long id) {
+        System.out.println("inside delete product function");
         return productRepository.findById(id)
                 .map(product -> {
                     productRepository.delete(product);
