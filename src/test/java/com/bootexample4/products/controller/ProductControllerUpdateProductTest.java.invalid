@@ -1,0 +1,41 @@
+
+package com.bootexample4.products.controller;
+import org.junit.jupiter.api.*;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.bootexample4.products.model.Product;
+import com.bootexample4.products.repository.ProductRepository;
+
+    @Test
+    @Tag("boundary")
+    public void updateProductWithSpecialCharactersInNameAndDescription() {
+        // Arrange
+        Long productId = 3L; // TODO: Replace with actual ID during runtime, if necessary.
+        Product existingProduct = new Product();
+        existingProduct.setId(productId);
+        existingProduct.setName("Old Name");
+        existingProduct.setDescription("Old Description");
+        existingProduct.setPrice(250.0);
+        Product updatedProductDetails = new Product();
+        updatedProductDetails.setName("@New$Name!"); // Edge case: Special characters in name.
+        updatedProductDetails.setDescription("#Updated@Description*"); // Edge case: Special characters in description.
+        updatedProductDetails.setPrice(300.0);
+        Product updatedProduct = new Product();
+        updatedProduct.setId(productId);
+        updatedProduct.setName(updatedProductDetails.getName());
+        updatedProduct.setDescription(updatedProductDetails.getDescription());
+        updatedProduct.setPrice(updatedProductDetails.getPrice());
+        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+        when(productRepository.save(existingProduct)).thenReturn(updatedProduct);
+        // Act
+        ResponseEntity<Product> response = productController.updateProduct(productId, updatedProductDetails);
+        // Assert
+        assertEquals(200, (int) response.getStatusCodeValue());
+        assertEquals(updatedProductDetails.getName(), response.getBody().getName());
+        assertEquals(updatedProductDetails.getDescription(), response.getBody().getDescription());
+        assertEquals(updatedProductDetails.getPrice(), response.getBody().getPrice(), 0.001);
+        verify(productRepository).findById(productId);
+        verify(productRepository).save(existingProduct);
+    }
