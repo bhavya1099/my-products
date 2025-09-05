@@ -19,6 +19,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
 
 // Example valid test scenario tag
 @Tag("valid")
@@ -703,5 +704,181 @@ public void deleteProductWithNullId() {
     
     assertEquals(ResponseEntity.notFound().build(), response, "Response does not match expected Not Found response");
     verify(productRepository, never()).delete(any(Product.class));
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@BeforeEach
+public void setUp() {
+    MockitoAnnotations.openMocks(this);
+    productController = new ProductController();
+    
+    productController.setProductRepository(productRepository);
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("valid")
+public void returnsNonEmptyListWhenRepositoryHasProducts() {
+    
+    List<Product> sampleProducts = new ArrayList<>();
+    Product product1 = new Product();
+    product1.setId(1L);
+    product1.setName("Product 1");
+    product1.setDescription("Description 1");
+    product1.setPrice(10.0);
+    Product product2 = new Product();
+    product2.setId(2L);
+    product2.setName("Product 2");
+    product2.setDescription("Description 2");
+    product2.setPrice(20.0);
+    sampleProducts.add(product1);
+    sampleProducts.add(product2);
+    when(productRepository.findAll()).thenReturn(sampleProducts);
+    
+    List<Product> result = productController.getAllProducts();
+    
+    assertEquals(sampleProducts.size(), result.size());
+    assertEquals(sampleProducts, result);
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("valid")
+public void returnsEmptyListWhenRepositoryIsEmpty() {
+    
+    when(productRepository.findAll()).thenReturn(new ArrayList<>());
+    
+    List<Product> result = productController.getAllProducts();
+    
+    assertTrue(result.isEmpty());
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("invalid")
+public void handlesNullReturnFromRepository() {
+    
+    when(productRepository.findAll()).thenReturn(null);
+    
+    List<Product> result = productController.getAllProducts();
+    
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("boundary")
+public void callsRepositoryOnceForFetchingProducts() {
+    
+    when(productRepository.findAll()).thenReturn(new ArrayList<>());
+    
+    productController.getAllProducts();
+    
+    verify(productRepository, times(1)).findAll();
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("invalid")
+public void handlesRepositoryExceptionsGracefully() {
+    
+    when(productRepository.findAll()).thenThrow(new RuntimeException("Database error"));
+    
+    try {
+        productController.getAllProducts();
+        fail("RuntimeException expected, but not thrown");
+    } catch (RuntimeException e) {
+        assertEquals("Database error", e.getMessage());
+    }
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("invalid")
+public void failsWhenRepositoryIsNull() {
+    
+    ProductController controllerWithNullRepo = new ProductController();
+    controllerWithNullRepo.setProductRepository(null);
+    
+    try {
+        controllerWithNullRepo.getAllProducts();
+        fail("NullPointerException or similar expected, but not thrown");
+    } catch (Exception e) {
+        assertNotNull(e);
+    }
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("boundary")
+public void returnsCorrectTypeForResult() {
+    
+    List<Product> sampleProducts = new ArrayList<>();
+    Product product = new Product();
+    product.setId(1L);
+    product.setName("Product 1");
+    product.setDescription("Description 1");
+    product.setPrice(10.0);
+    sampleProducts.add(product);
+    when(productRepository.findAll()).thenReturn(sampleProducts);
+    
+    List<Product> result = productController.getAllProducts();
+    
+    assertTrue(result instanceof List);
+}
+
+/*ROOST_METHOD_HASH=getAllProducts_7e38cc05f6
+ROOST_METHOD_SIG_HASH=getAllProducts_fef141838b
+
+*/
+@Test
+@Tag("integration")
+public void producesPredictableOutputBasedOnRepositoryState() {
+    
+    List<Product> sampleProducts = new ArrayList<>();
+    Product product = new Product();
+    product.setId(1L);
+    product.setName("Product 1");
+    product.setDescription("Description 1");
+    product.setPrice(10.0);
+    sampleProducts.add(product);
+    when(productRepository.findAll()).thenReturn(sampleProducts);
+    List<Product> resultNonEmpty = productController.getAllProducts();
+    assertFalse(resultNonEmpty.isEmpty());
+    assertEquals(sampleProducts, resultNonEmpty);
+    
+    when(productRepository.findAll()).thenReturn(new ArrayList<>());
+    List<Product> resultEmpty = productController.getAllProducts();
+    assertTrue(resultEmpty.isEmpty());
+    
+    when(productRepository.findAll()).thenReturn(null);
+    List<Product> resultNull = productController.getAllProducts();
+    assertNotNull(resultNull);
+    assertTrue(resultNull.isEmpty());
 }
 }
